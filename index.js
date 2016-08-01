@@ -38,14 +38,33 @@ var port = process.env.PORT || 1234
 
 // get all quotes in a list
 app.get("/api/lists/:list_name", function(req, res) {
-	res.send("hello")
+	if (req.params.list_name.trim() == "") {
+		return res.status(400).send({
+			"status": "error",
+			"error": "List name cannot be blank"
+		})
+	} else {
+		Quote.findAll({
+			where: {
+				list: req.params.list_name.trim()
+			}
+		}).then(function(results) {
+			var jsonResults = [];
+			for (result of results) {
+				jsonResults.push(result.get())
+			}
+			res.send({
+				"status": "ok",
+				"list": req.params.list_name.trim(),
+				quotes: jsonResults
+			})
+		})
+	}
 })
 
 
 // add a new quote to a list
 app.post("/api/lists/:list_name", function(req, res) {
-	console.log(req.params.list_name);
-	console.log(req.body);
 	if (req.params.list_name.trim() == "") {
 		return res.status(400).send({
 			"status": "error",
