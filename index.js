@@ -99,7 +99,6 @@ app.post("/api/lists/:list_name", function(req, res) {
 })
 
 // get a random quote from a list
-
 app.get("/api/lists/:list_name/random", function(req, res) {
 	if (req.params.list_name.trim() == "") {
 		return res.status(400).send({
@@ -125,6 +124,38 @@ app.get("/api/lists/:list_name/random", function(req, res) {
 		})
 	}
 })
+
+// get a specific quote
+app.get("/api/quotes/:quote_id", function(req, res) {
+	var quote_id = parseInt(req.params.quote_id)
+	if (isNaN(quote_id)) {
+		return res.status(400).send({
+			"status": "error",
+			"error": "Quote id must be a number"
+		})
+	} else if (!("quote_id" in req.params) && (req.params.quote_id.trim() == "")) {
+		return res.status(400).send({
+			"status": "error",
+			"error": "Quote id cannot be blank"
+		})
+	} else {
+		// do stuff
+		Quote.findById(parseInt(req.params.quote_id)).then(function(quote) {
+			if (quote) {
+				return res.status(200).send(Object.assign({}, quote.get(), {
+					status: "ok"
+				}))
+			} else {
+				return res.status(404).send({
+					"status": "error",
+					"error": "Quote not found"
+				})
+			}
+		})
+	}
+})
+
+
 
 app.listen(port, function() {
 	console.log("Listening on " + port + "...");
