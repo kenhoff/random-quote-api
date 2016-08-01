@@ -1,0 +1,171 @@
+FORMAT: 1A
+HOST: http://randomquote.hoff.tech/api/
+
+# Random Quote API
+
+The Random Quote API allows users to get quotes at random from lists of quotes, and to add additional quotes to those lists.
+
+# Group Quotes
+
+## Lists of quotes [/lists/{list_name}]
+
+A list of quotes contains any number of quotes, and might contain `0` quotes. You can add quotes to lists, you can retrieve quotes from lists at random, and you can retreive all quotes from a list.
+
++ Parameters
+    + list_name: kanyequotes (required, string) - the name of the list that contains quotes
+
+### Get all quotes in a list [GET]
+
+Returns an object with all of the quotes in a list. If there are no quotes in the list, returns an object with an empty array.
+
++ Response 200 (application/json)
+
+```
+{
+    "status": "ok",
+    "list": "kanyequotes",
+    "quotes": [
+        {
+            "list": "kanyequotes",
+            "text": "My greatest pain in life is that I will never be able to see myself perform live.",
+            "id": 1
+        },
+        {
+            "list": "kanyequotes",
+            "text": "I hate when I'm on a flight and I wake up with a water bottle next to me like oh great now I gotta be responsible for this water bottle.",
+            "id": 2
+        },
+        {
+            "list": "kanyequotes",
+            "text": "Fur pillows are hard to actually sleep on.",
+            "id": 3
+        }
+    ]
+}
+```
+
++ Response 200 (application/json)
+
+```
+{
+    "status": "ok",
+    "list": "kanyequotes",
+    "quotes": []
+}
+```
+
+### Add a new quote to a list [POST]
+
+Adds a new quote to the list. If successful, returns the new quote. If unsuccessful, returns an error message.
+
++ Request (application/json)
+
+```
+{
+    "text": "Fur pillows are hard to actually sleep on."
+}
+```
+
++ Response 201 (application/json)
+
+```
+{
+    "list": "kanyequotes",
+    "text": "Fur pillows are hard to actually sleep on.",
+    "id": 3,
+    "status": "ok"
+}
+```
+
++ Response 400 (application/json)
+
+```
+{
+    "status": "error",
+    "error": "Quotes must be less than 500 characters in length."
+}
+```
+
+## Random quotes [/lists/{list_name}/random]
+
+You can get a quote at random by hitting the `/random` endpoint on a list.
+
+Note: This isn't 100% "kosher" API design. It gets the job done, but some hardcore REST API developers will frown on me doing it this way.
+
++ Parameters
+    + list_name: kanyequotes (required, string) - the name of the list that contains quotes
+
+### Get a random quote from a list [GET]
+
+Gets a random quote from a list. Returns a quote in a single JSON object. If there are no quotes in the list, returns an (almost) empty JSON object. (that might be good design, and might not be. who knows?!?!)
+
++ Response 200 (application/json)
+
+```
+{
+    "list": "kanyequotes",
+    "text": "Fur pillows are hard to actually sleep on.",
+    "id": 3,
+    "status": "ok"
+}
+```
+
++ Response 200 (application/json)
+
+```
+{
+    "status": "ok"
+}
+```
+
+## Quotes [/quotes/{quote_id}]
+
+You can retrieve or delete individual quotes.
+
++ Parameters
+    + quote_id: 3 (required, number) - the `id` of the quote
+
+### Get a specific quote [GET]
+
+If you know the exact `id` of the quote you're trying to get, you can get it this way.
+
++ Response 200 (application/json)
+
+```
+{
+    "list": "kanyequotes",
+    "text": "Fur pillows are hard to actually sleep on.",
+    "id": 3,
+    "status": "ok"
+}
+```
+
++ Response 404 (application/json)
+
+```
+{
+    "status": "error",
+    "error": "Couldn't find that quote!"
+}
+```
+
+### Remove a quote [DELETE]
+
+It's possible to delete a quote if you know the `id` of the quote. I'd recommend only deleting quotes from lists that you're working on - don't delete quotes off of other people's lists.
+
++ Response 200 (application/json)
+
+```
+{
+    "status": "ok"
+}
+```
+
++ Response 404 (application/json)
+
+```
+{
+    "status": "error",
+    "error": "Couldn't find that quote!"
+}
+```

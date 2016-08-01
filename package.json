@@ -1,0 +1,25 @@
+{
+  "name": "random-quote-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "postinstall": "npm run build",
+    "build": "apiary preview --path=randomquote.apib --output=randomquote.html",
+    "dev": "nodemon --exec 'npm run build; node index.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kenhoff/random-quote-api.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kenhoff/random-quote-api/issues"
+  },
+  "homepage": "https://github.com/kenhoff/random-quote-api#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
