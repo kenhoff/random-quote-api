@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "postinstall": "npm run build",
     "build": "apiary preview --path=randomquote.apib --output=randomquote.html",
-    "dev": "nodemon --exec 'npm run build; node index.js'"
+    "dev": "nodemon --exec 'npm run build; node index.js'",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
