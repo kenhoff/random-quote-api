@@ -98,6 +98,34 @@ app.post("/api/lists/:list_name", function(req, res) {
 	}
 })
 
+// get a random quote from a list
+
+app.get("/api/lists/:list_name/random", function(req, res) {
+	if (req.params.list_name.trim() == "") {
+		return res.status(400).send({
+			"status": "error",
+			"error": "List name cannot be blank"
+		})
+	} else {
+		Quote.findOne({
+			where: {
+				list: req.params.list_name.trim()
+			},
+			order: [Sequelize.fn("RANDOM")]
+		}).then(function(quote) {
+			if (quote) {
+				res.status(200).send(Object.assign({}, quote.get(), {
+					status: "ok"
+				}))
+			} else {
+				res.status(200).send({
+					status: "ok"
+				})
+			}
+		})
+	}
+})
+
 app.listen(port, function() {
 	console.log("Listening on " + port + "...");
 })
