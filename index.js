@@ -155,6 +155,40 @@ app.get("/api/quotes/:quote_id", function(req, res) {
 	}
 })
 
+// delete a specific quote
+app.delete("/api/quotes/:quote_id", function(req, res) {
+	var quote_id = parseInt(req.params.quote_id)
+	if (isNaN(quote_id)) {
+		return res.status(400).send({
+			"status": "error",
+			"error": "Quote id must be a number"
+		})
+	} else if (!("quote_id" in req.params) && (req.params.quote_id.trim() == "")) {
+		return res.status(400).send({
+			"status": "error",
+			"error": "Quote id cannot be blank"
+		})
+	} else {
+		// do stuff
+		Quote.destroy({
+			where: {
+				id: parseInt(req.params.quote_id)
+			}
+		}).then(function(quote) {
+			console.log(quote);
+			if (quote) {
+				return res.status(200).send({
+					status: "ok"
+				})
+			} else {
+				return res.status(404).send({
+					"status": "error",
+					"error": "Quote not found"
+				})
+			}
+		})
+	}
+})
 
 
 app.listen(port, function() {
