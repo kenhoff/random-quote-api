@@ -22,7 +22,10 @@ var Quote = sequelize.define('quote', {
 Quote.sync()
 
 const app = require('express')();
+const cors = require('cors');
 var bodyParser = require('body-parser');
+
+app.use(cors())
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
